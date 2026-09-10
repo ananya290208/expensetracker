@@ -1,11 +1,11 @@
 {
-    "name": "demoapplication",
-    "short_name": "demoapplication",
+    "name": "Expense Tracker",
+    "short_name": "Expense Tracker",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Expense Tracker application with Firebase Authentication.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
