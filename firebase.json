@@ -1,1 +1,36 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"expensetracker-65999","appId":"1:569202997079:android:8db01c24dc68e46299b012","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"expensetracker-65999","configurations":{"android":"1:569202997079:android:8db01c24dc68e46299b012","web":"1:569202997079:web:17216d177395070399b012"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "expensetracker-65999",
+          "appId": "1:569202997079:android:8db01c24dc68e46299b012",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "expensetracker-65999",
+          "configurations": {
+            "android": "1:569202997079:android:8db01c24dc68e46299b012",
+            "web": "1:569202997079:web:17216d177395070399b012"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
