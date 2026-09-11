@@ -284,6 +284,10 @@ Live URL: [https://expensetracker-65999.web.app](https://expensetracker-65999.we
 
 ---
 
+Android APK is available in Releases Section
+
 ## 📱 Application Demo
 
-https://github.com/user-attachments/assets/11dc3bc0-54dc-45bc-bdc6-8f4d4afcfa80
+
+https://github.com/user-attachments/assets/69e99f77-7bca-4c52-8e65-62912be03913
+
