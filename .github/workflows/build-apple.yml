@@ -1,4 +1,4 @@
-﻿name: Build macOS and iOS
+name: Build macOS and iOS
 
 on:
   workflow_dispatch:
@@ -9,10 +9,15 @@ on:
 
 jobs:
   build-apple:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up Xcode (Swift 6 / Xcode 16+)
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
