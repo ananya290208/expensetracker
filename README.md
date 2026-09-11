@@ -257,22 +257,6 @@ Once the app opens on the emulator, verify the following core features:
 
 ---
 
-## Additional Run & Build Targets
-
-### 1. Web Application (Local Chrome)
-```powershell
-flutter run -d chrome
-```
-
-### 2. Build Standalone Release Android APK
-```powershell
-flutter build apk --release
-```
-The compiled APK will be at:
-`build/app/outputs/flutter-apk/app-release.apk`
-
----
-
 ## Deploy to Firebase Hosting
 
 To deploy updates to the live web application:
@@ -284,10 +268,4 @@ Live URL: [https://expensetracker-65999.web.app](https://expensetracker-65999.we
 
 ---
 
-Android APK is available in Releases Section
-
-## 📱 Application Demo
-
-
-https://github.com/user-attachments/assets/69e99f77-7bca-4c52-8e65-62912be03913
 
