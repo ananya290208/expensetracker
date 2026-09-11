@@ -183,3 +183,9 @@ flutter build web --release
 firebase deploy --only hosting
 ```
 Live URL: [https://expensetracker-65999.web.app](https://expensetracker-65999.web.app)
+
+
+Demo: 
+
+https://github.com/user-attachments/assets/11dc3bc0-54dc-45bc-bdc6-8f4d4afcfa80
+
