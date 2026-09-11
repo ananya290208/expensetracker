@@ -6,7 +6,12 @@ A full-stack Flutter application featuring real-time expense management, secure 
 * **GitHub Repository**: [https://github.com/ananya290208/expensetracker](https://github.com/ananya290208/expensetracker)
 * **Firebase Project ID**: `expensetracker-65999`
 
-Expense Tracker Kit (Demo, APK, iOS) - 
+Expense Tracker Demo - 
+
+https://github.com/user-attachments/assets/ffb07795-3f99-4435-b25e-0da7b8e35ab2
+
+Android APK and iOS installable is available in Releases Section. 
+
 ## Architecture Overview
 
 ```
