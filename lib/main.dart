@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'screens/auth_gate.dart';
 
@@ -43,13 +45,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Simple data class. Just holds values, nothing else.
+// Simple data class. Holds values and serialization for persistence.
 class Expense {
   String title;
   double amount;
   String category;
 
   Expense(this.title, this.amount, this.category);
+
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'amount': amount,
+        'category': category,
+      };
+
+  factory Expense.fromJson(Map<String, dynamic> json) => Expense(
+        json['title'] as String,
+        (json['amount'] as num).toDouble(),
+        json['category'] as String,
+      );
 }
 
 class HomeScreen extends StatefulWidget {
@@ -67,27 +81,57 @@ class _HomeScreenState extends State<HomeScreen> {
   // and any widget listening (see StreamBuilder below) updates itself.
   StreamController<double> totalController = StreamController<double>();
 
+  String get _userStorageKey {
+    final uid = FirebaseAuth.instance.currentUser?.uid ?? 'guest';
+    return 'user_expenses_$uid';
+  }
+
   @override
   void initState() {
     super.initState();
     loadExpenses();
   }
 
-  // Pretends to fetch data from a server or database.
+  // Loads persisted expenses from local storage for the current authenticated user.
+  // Defaults to an empty list without showing hardcoded sample expenses.
   void loadExpenses() async {
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final savedList = prefs.getStringList(_userStorageKey);
 
-    if (!mounted) return;
-    setState(() {
-      expenses = [
-        Expense('Groceries', 1450, 'Food'),
-        Expense('Uber', 220, 'Transport'),
-        Expense('Electricity Bill', 1800, 'Bills'),
-      ];
-      isLoading = false;
-    });
+      List<Expense> loaded = [];
+      if (savedList != null) {
+        for (var item in savedList) {
+          try {
+            loaded.add(Expense.fromJson(jsonDecode(item) as Map<String, dynamic>));
+          } catch (_) {}
+        }
+      }
+
+      if (!mounted) return;
+      setState(() {
+        expenses = loaded;
+        isLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        expenses = [];
+        isLoading = false;
+      });
+    }
 
     updateTotal();
+  }
+
+  Future<void> _saveExpenses() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final stringList = expenses.map((e) => jsonEncode(e.toJson())).toList();
+      await prefs.setStringList(_userStorageKey, stringList);
+    } catch (e) {
+      debugPrint('Failed to save expenses: $e');
+    }
   }
 
   void updateTotal() {
@@ -102,6 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       expenses.add(expense);
     });
+    _saveExpenses();
     updateTotal();
   }
 
@@ -109,13 +154,14 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       expenses.removeAt(index);
     });
+    _saveExpenses();
     updateTotal();
   }
 
   void goToAddExpenseScreen() async {
     var newExpense = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddExpenseScreen()),
+      MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
     );
 
     if (newExpense != null) {
@@ -208,9 +254,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: expenses.length,
-                    itemBuilder: (context, index) {
+                  child: expenses.isEmpty
+                      ? const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.receipt_long_outlined,
+                                size: 64,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(height: 12),
+                              Text(
+                                'No expenses logged yet.',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              SizedBox(height: 6),
+                              Text(
+                                'Tap the + button below to add your first expense.',
+                                style: TextStyle(fontSize: 14, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: expenses.length,
+                          itemBuilder: (context, index) {
                       var expense = expenses[index];
                       return ListTile(
                         title: Text(expense.title),
