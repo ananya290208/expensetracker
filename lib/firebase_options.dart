@@ -13,12 +13,23 @@ class DefaultFirebaseOptions {
         return android;
       case TargetPlatform.iOS:
         return ios;
+      case TargetPlatform.macOS:
+        return macos;
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
         );
     }
   }
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBtlGFnFf8k2vXZjggH0RWpOl_A90odCc0',
+    appId: '1:569202997079:web:17216d177395070399b012',
+    messagingSenderId: '569202997079',
+    projectId: 'expensetracker-65999',
+    storageBucket: 'expensetracker-65999.firebasestorage.app',
+    iosBundleId: 'com.example.demoapplication',
+  );
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBtlGFnFf8k2vXZjggH0RWpOl_A90odCc0',

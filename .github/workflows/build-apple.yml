@@ -1,0 +1,49 @@
+﻿name: Build macOS and iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-apple:
+    runs-on: macos-14
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build macOS Desktop Application
+        run: |
+          flutter build macos --release
+          cd build/macos/Build/Products/Release
+          zip -r ../../../../ExpenseTracker-macOS.zip *.app
+
+      - name: Build iOS Application (Unsigned)
+        run: |
+          flutter build ios --release --no-codesign
+          mkdir -p Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r ExpenseTracker-iOS-unsigned.ipa Payload
+
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ExpenseTracker-macOS-Desktop
+          path: ExpenseTracker-macOS.zip
+
+      - name: Upload iOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ExpenseTracker-iOS-Unsigned
+          path: ExpenseTracker-iOS-unsigned.ipa
